@@ -1,0 +1,47 @@
+services:
+  app:
+    tty: true # Keep the container running
+    restart: always # Restart policy
+    image: ticket-booking:latest
+    container_name: ticket-booking
+    build: .
+    ports:
+      - 3000:3000 # Expose port 3000
+    env_file:
+      - .env # Load environment variables from .env file
+    volumes:
+      - .:/src/app # Mount the current directory to /src/app in the container
+    networks:
+      - application
+    depends_on:
+      db: 
+        condition: service_healthy # Wait for the database to be healthy
+
+    command: air -c .air.toml
+
+  db:
+    image: postgres:latest
+    container_name: ticket-booking-db
+    restart: always
+    environment:
+      - POSTGRES_HOST=${DB_HOST}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - 5432:5432 # Expose port 5432 for PostgreSQL
+    volumes:
+      - postgres-db:/var/lib/postgresql/data # Persist database data
+    networks:
+      - application
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  application:
+
+volumes:
+  postgres-db:

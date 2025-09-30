@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Events - Exclusive Nightlife</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .desktop-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #333;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(78, 205, 196, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 2px solid #333;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #4ecdc4;
+        }
+
+        .btn-small {
+            width: auto;
+            padding: 8px 16px;
+            font-size: 14px;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .switch-page {
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+        }
+
+        .switch-page a {
+            color: #4ecdc4;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .switch-page a:hover {
+            text-decoration: underline;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #888;
+        }
+
+        .nav-item.active {
+            color: #4ecdc4;
+        }
+
+        .nav-item:hover {
+            color: #4ecdc4;
+        }
+
+        .event-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(78, 205, 196, 0.2);
+            border-color: #4ecdc4;
+        }
+
+        .event-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .event-details {
+            color: #bbb;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .event-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-private {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+        }
+
+        .status-exclusive {
+            background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+        }
+
+        .invite-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #333;
+        }
+
+        .invite-email {
+            font-weight: 500;
+        }
+
+        .invite-status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            background: #ff9500;
+        }
+
+        .status-accepted {
+            background: #4ecdc4;
+        }
+
+        .status-declined {
+            background: #ff6b6b;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 80px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-weight: 500;
+            z-index: 2000;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateX(-50%) translateY(-100%);
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover,
+        .payment-method.selected {
+            border-color: #4ecdc4;
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.2);
+        }
+
+        .payment-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+            border-radius: 8px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            .logo {
+                font-size: 24px;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .rsvp-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .rsvp-buttons .btn {
+            width: auto;
+            flex: 1;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        .btn-accept {
+            background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+        }
+
+        .btn-decline {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+        }
+
+        .admin-panel {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+        }
+
+        .admin-section {
+            margin-bottom: 30px;
+        }
+
+        .admin-section h3 {
+            color: #4ecdc4;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .user-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-email {
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-mini {
+            padding: 4px 8px;
+            font-size: 11px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-promote {
+            background: #4ecdc4;
+            color: white;
+        }
+
+        .btn-ban {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="notification" class="notification"></div>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="page active">
+        <div class="container">
+            <div class="logo">VIP EVENTS</div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary">LOGIN</button>
+            </form>
+            <div class="switch-page">
+                Don't have an account? <a href="#" onclick="showPage('signupPage')">Sign up</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Page -->
+    <div id="signupPage" class="page">
+        <div class="container">
+            <div class="logo">VIP EVENTS</div>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="signupName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="signupEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="signupPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>Account Type</label>
+                    <select id="signupRole" required>
+                        <option value="guest">Guest</option>
+                        <option value="host">Event Host</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">SIGN UP</button>
+            </form>
+            <div class="switch-page">
+                Already have an account? <a href="#" onclick="showPage('loginPage')">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboardPage" class="page">
+        <div class="container">
+            <div class="logo">DASHBOARD</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalEvents">0</div>
+                    <div class="stat-label">Events</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalInvites">0</div>
+                    <div class="stat-label">Invites</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalRSVPs">0</div>
+                    <div class="stat-label">RSVPs</div>
+                </div>
+            </div>
+            <div id="eventsList" class="grid"></div>
+        </div>
+    </div>
+
+    <!-- Create Event -->
+    <div id="createEventPage" class="page">
+        <div class="container">
+            <div class="logo">CREATE EVENT</div>
+            <form id="createEventForm">
+                <div class="form-group">
+                    <label>Event Name</label>
+                    <input type="text" id="eventName" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="eventDescription" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Date & Time</label>
+                    <input type="datetime-local" id="eventDateTime" required>
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" id="eventLocation" required>
+                </div>
+                <div class="form-group">
+                    <label>Ticket Price ($)</label>
+                    <input type="number" id="eventPrice" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Max Guests</label>
+                    <input type="number" id="eventCapacity" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label>Event Type</label>
+                    <select id="eventType" required>
+                        <option value="villa_party">Villa Party</option>
+                        <option value="underground_rave">Underground Rave</option>
+                        <option value="private_gathering">Private Gathering</option>
+                        <option value="rooftop_party">Rooftop Party</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">CREATE EVENT</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Invite Management -->
+    <div id="invitePage" class="page">
+        <div class="container">
+            <div class="logo">MANAGE INVITES</div>
+            <div class="form-group">
+                <label>Select Event</label>
+                <select id="inviteEventSelect">
+                    <option value="">Select an event...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Invite Email</label>
+                <input type="email" id="inviteEmail" placeholder="Enter email to invite">
+            </div>
+            <button onclick="sendInvite()" class="btn btn-primary">SEND INVITE</button>
+            
+            <div id="invitesList" style="margin-top: 30px;"></div>
+        </div>
+    </div>
+
+    <!-- Ticket Purchase -->
+    <div id="ticketPage" class="page">
+        <div class="container">
+            <div class="logo">BUY TICKETS</div>
+            <div id="availableEvents"></div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="page">
+        <div class="container">
+            <div class="logo">PAYMENT</div>
+            <div id="paymentEventDetails"></div>
+            
+            <div class="form-group">
+                <label>Payment Method</label>
+                <div class="payment-method selected" data-method="card">
+                    <div class="payment-icon">💳</div>
+                    <div>Credit/Debit Card</div>
+                </div>
+                <div class="payment-method" data-method="paypal">
+                    <div class="payment-icon">P</div>
+                    <div>PayPal</div>
+                </div>
+                <div class="payment-method" data-method="crypto">
+                    <div class="payment-icon">₿</div>
+                    <div>Cryptocurrency</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Card Number</label>
+                <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456">
+            </div>
+            <div style="display: flex; gap: 15px;">
+                <div class="form-group" style="flex: 1;">
+                    <label>Expiry</label>
+                    <input type="text" id="cardExpiry" placeholder="MM/YY">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>CVV</label>
+                    <input type="text" id="cardCVV" placeholder="123">
+                </div>
+            </div>
+
+            <button onclick="processPayment()" class="btn btn-primary">COMPLETE PURCHASE</button>
+            <button onclick="showPage('ticketPage')" class="btn btn-secondary">CANCEL</button>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPage" class="page">
+        <div class="container">
+            <div class="logo">ADMIN PANEL</div>
+            
+            <div class="admin-panel">
+                <div class="admin-section">
+                    <h3>User Management</h3>
+                    <div id="usersList" class="user-list"></div>
+                </div>
+
+                <div class="admin-section">
+                    <h3>Event Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="adminTotalUsers">0</div>
+                            <div class="stat-label">Total Users</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="adminTotalEvents">0</div>
+                            <div class="stat-label">Total Events</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="adminActiveEvents">0</div>
+                            <div class="stat-label">Active Events</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="adminTotalRevenue">$0</div>
+                            <div class="stat-label">Revenue</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div id="navigation" class="nav-bar hidden">
+        <div class="nav-item active" onclick="showPage('dashboardPage')">
+            🏠<br><small>Dashboard</small>
+        </div>
+        <div class="nav-item" onclick="showPage('createEventPage')">
+            ➕<br><small>Create</small>
+        </div>
+        <div class="nav-item" onclick="showPage('invitePage')">
+            📧<br><small>Invites</small>
+        </div>
+        <div class="nav-item" onclick="showPage('ticketPage')">
+            🎫<br><small>Tickets</small>
+        </div>
+        <div class="nav-item" id="adminNavItem" onclick="showPage('adminPage')" style="display: none;">
+            👑<br><small>Admin</small>
+        </div>
+    </div>
+
+    <script>
+        // Mock Database
+        const db = {
+            users: [
+                { id: 1, name: 'Admin User', email: 'admin@vipevents.com', password: 'admin123', role: 'admin' }
+            ],
+            events: [],
+            invites: [],
+            tickets: [],
+            currentUser: null
+        };
+
+        // Utility Functions
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        function generateId() {
+            return Date.now() + Math.random().toString(36).substr(2, 9);
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Page Navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Update navigation highlight
+            if (pageId !== 'loginPage' && pageId !== 'signupPage' && pageId !== 'paymentModal') {
+                const navItems = document.querySelectorAll('.nav-item');
+                const pageMap = {
+                    'dashboardPage': 0,
+                    'createEventPage': 1,
+                    'invitePage': 2,
+                    'ticketPage': 3,
+                    'adminPage': 4
+                };
+                if (pageMap[pageId] !== undefined && navItems[pageMap[pageId]]) {
+                    navItems[pageMap[pageId]].classList.add('active');
+                }
+            }
+
+            // Load page-specific data
+            if (pageId === 'dashboardPage') loadDashboard();
+            if (pageId === 'invitePage') loadInviteManagement();
+            if (pageId === 'ticketPage') loadAvailableEvents();
+            if (pageId === 'adminPage') loadAdminPanel();
+        }
+
+        // Authentication
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const user = db.users.find(u => u.email === email && u.password === password);
+            if (user) {
+                db.currentUser = user;
+                document.getElementById('navigation').classList.remove('hidden');
+                if (user.role === 'admin') {
+                    document.getElementById('adminNavItem').style.display = 'block';
+                }
+                showPage('dashboardPage');
+                showNotification(`Welcome back, ${user.name}!`);
+            } else {
+                showNotification('Invalid credentials');
+            }
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const role = document.getElementById('signupRole').value;
+            
+            if (db.users.find(u => u.email === email)) {
+                showNotification('Email already exists');
+                return;
+            }
+            
+            const newUser = {
+                id: generateId(),
+                name,
+                email,
+                password,
+                role
+            };
+            
+            db.users.push(newUser);
+            db.currentUser = newUser;
+            document.getElementById('navigation').classList.remove('hidden');
+            showPage('dashboardPage');
+            showNotification(`Welcome, ${name}!`);
+        });
+
+        // Dashboard
+        function loadDashboard() {
+            if (!db.currentUser) return;
+            
+            const userEvents = db.events.filter(e => e.hostId === db.currentUser.id);
+            const userInvites = db.invites.filter(i => i.hostId === db.currentUser.id);
+            const userRSVPs = db.invites.filter(i => i.guestEmail === db.currentUser.email && i.status === 'accepted');
+            
+            document.getElementById('totalEvents').textContent = userEvents.length;
+            document.getElementById('totalInvites').textContent = userInvites.length;
+            document.getElementById('totalRSVPs').textContent = userRSVPs.length;
+            
+            const eventsList = document.getElementById('eventsList');
+            eventsList.innerHTML = '';
+            
+            if (userEvents.length === 0) {
+                eventsList.innerHTML = '<div class="loading">No events yet. Create your first exclusive event!</div>';
+                return;
+            }
+            
+            userEvents.forEach(event => {
+                const eventCard = document.createElement('div');
+                eventCard.className = 'event-card';
+                eventCard.innerHTML = `
+                    <div class="event-title">${event.name}</div>
+                    <div class="event-details">
+                        📅 ${formatDate(event.dateTime)}<br>
+                        📍 ${event.location}<br>
+                        💰 $${event.price} • 👥 ${event.capacity} guests max
+                    </div>
+                    <span class="event-status status-exclusive">${event.type.replace('_', ' ')}</span>
+                    <div class="rsvp-buttons">
+                        <button class="btn btn-small btn-secondary" onclick="editEvent('${event.id}')">Edit</button>
+                        <button class="btn btn-small btn-decline" onclick="deleteEvent('${event.id}')">Delete</button>
+                    </div>
+                `;
+                eventsList.appendChild(eventCard);
+            });
+        }
+
+        // Create Event
+        document.getElementById('createEventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newEvent = {
+                id: generateId(),
+                name: document.getElementById('eventName').value,
+                description: document.getElementById('eventDescription').value,
+                dateTime: document.getElementById('eventDateTime').value,
+                location: document.getElementById('eventLocation').value,
+                price: parseFloat(document.getElementById('eventPrice').value),
+                capacity: parseInt(document.getElementById('eventCapacity').value),
+                type: document.getElementById('eventType').value,
+                hostId: db.currentUser.id,
+                hostName: db.currentUser.name,
+                createdAt: new Date().toISOString()
+            };
+            
+            db.events.push(newEvent);
+            
+            // Reset form
+            document.getElementById('createEventForm').reset();
+            
+            showNotification('Event created successfully!');
+            showPage('dashboardPage');
+        });
+
+        // Invite Management
+        function loadInviteManagement() {
+            const eventSelect = document.getElementById('inviteEventSelect');
+            eventSelect.innerHTML = '<option value="">Select an event...</option>';
+            
+            const userEvents = db.events.filter(e => e.hostId === db.currentUser.id);
+            userEvents.forEach(event => {
+                const option = document.createElement('option');
+                option.value = event.id;
+                option.textContent = event.name;
+                eventSelect.appendChild(option);
+            });
+            
+            loadInvitesList();
+        }
+
+        function sendInvite() {
+            const eventId = document.getElementById('inviteEventSelect').value;
+            const email = document.getElementById('inviteEmail').value;
+            
+            if (!eventId || !email) {
+                showNotification('Please select an event and enter an email');
+                return;
+            }
+            
+            const event = db.events.find(e => e.id === eventId);
+            if (!event) return;
+            
+            // Check if invite already exists
+            if (db.invites.find(i => i.eventId === eventId && i.guestEmail === email)) {
+                showNotification('Invite already sent to this email');
+                return;
+            }
+            
+            const newInvite = {
+                id: generateId(),
+                eventId: eventId,
+                eventName: event.name,
+                hostId: db.currentUser.id,
+                hostName: db.currentUser.name,
+                guestEmail: email,
+                status: 'pending',
+                sentAt: new Date().toISOString()
+            };
+            
+            db.invites.push(newInvite);
+            document.getElementById('inviteEmail').value = '';
+            loadInvitesList();
+            showNotification('Invite sent successfully!');
+        }
+
+        function loadInvitesList() {
+            const invitesList = document.getElementById('invitesList');
+            const userInvites = db.invites.filter(i => i.hostId === db.currentUser.id);
+            
+            if (userInvites.length === 0) {
+                invitesList.innerHTML = '<div class="loading">No invites sent yet</div>';
+                return;
+            }
+            
+            invitesList.innerHTML = '<h3 style="color: #4ecdc4; margin-bottom: 15px;">Sent Invites</h3>';
+            
+            userInvites.forEach(invite => {
+                const inviteItem = document.createElement('div');
+                inviteItem.className = 'invite-item';
+                inviteItem.innerHTML = `
+                    <div>
+                        <div class="invite-email">${invite.guestEmail}</div>
+                        <div style="font-size: 14px; color: #888;">${invite.eventName}</div>
+                    </div>
+                    <span class="invite-status status-${invite.status}">${invite.status.toUpperCase()}</span>
+                `;
+                invitesList.appendChild(inviteItem);
+            });
+        }
+
+        // Ticket Purchase
+        function loadAvailableEvents() {
+            const availableEvents = document.getElementById('availableEvents');
+            
+            // Get events user is invited to or public events
+            const userInvites = db.invites.filter(i => i.guestEmail === db.currentUser.email);
+            const invitedEventIds = userInvites.map(i => i.eventId);
+            const availableEventsList = db.events.filter(e => 
+                invitedEventIds.includes(e.id) || e.hostId !== db.currentUser.id
+            );
+            
+            if (availableEventsList.length === 0) {
+                availableEvents.innerHTML = '<div class="loading">No events available for purchase</div>';
+                return;
+            }
+            
+            availableEvents.innerHTML = '';
+            
+            availableEventsList.forEach(event => {
+                const userInvite = userInvites.find(i => i.eventId === event.id);
+                const hasTicket = db.tickets.find(t => t.eventId === event.id && t.userId === db.currentUser.id);
+                
+                const eventCard = document.createElement('div');
+                eventCard.className = 'event-card';
+                eventCard.innerHTML = `
+                    <div class="event-title">${event.name}</div>
+                    <div class="event-details">
+                        ${event.description}<br><br>
+                        📅 ${formatDate(event.dateTime)}<br>
+                        📍 ${event.location}<br>
+                        💰 ${event.price} • 👥 ${event.capacity} guests max<br>
+                        🎭 Hosted by ${event.hostName}
+                    </div>
+                    <span class="event-status status-private">${event.type.replace('_', ' ')}</span>
+                    ${hasTicket ? 
+                        '<div class="rsvp-buttons"><span style="color: #4ecdc4; font-weight: bold;">✓ TICKET PURCHASED</span></div>' :
+                        userInvite ? 
+                            `<div class="rsvp-buttons">
+                                ${userInvite.status === 'pending' ? 
+                                    `<button class="btn btn-accept" onclick="respondToInvite('${userInvite.id}', 'accepted')">Accept Invite</button>
+                                     <button class="btn btn-decline" onclick="respondToInvite('${userInvite.id}', 'declined')">Decline</button>` :
+                                    userInvite.status === 'accepted' ?
+                                        `<button class="btn btn-primary" onclick="purchaseTicket('${event.id}')">Buy Ticket - ${event.price}</button>` :
+                                        '<span style="color: #ff6b6b;">Invite Declined</span>'
+                                }
+                            </div>` :
+                            '<div style="color: #888; text-align: center; padding: 10px;">Invite Only Event</div>'
+                    }
+                `;
+                availableEvents.appendChild(eventCard);
+            });
+        }
+
+        function respondToInvite(inviteId, status) {
+            const invite = db.invites.find(i => i.id === inviteId);
+            if (invite) {
+                invite.status = status;
+                loadAvailableEvents();
+                showNotification(`Invite ${status}!`);
+            }
+        }
+
+        function purchaseTicket(eventId) {
+            const event = db.events.find(e => e.id === eventId);
+            if (!event) return;
+            
+            // Show payment modal
+            const paymentEventDetails = document.getElementById('paymentEventDetails');
+            paymentEventDetails.innerHTML = `
+                <div class="event-card">
+                    <div class="event-title">${event.name}</div>
+                    <div class="event-details">
+                        📅 ${formatDate(event.dateTime)}<br>
+                        📍 ${event.location}<br>
+                        💰 Total: ${event.price}
+                    </div>
+                </div>
+            `;
+            
+            // Store current event for payment processing
+            window.currentPurchaseEvent = event;
+            showPage('paymentModal');
+        }
+
+        // Payment Processing
+        document.querySelectorAll('.payment-method').forEach(method => {
+            method.addEventListener('click', function() {
+                document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        function processPayment() {
+            const event = window.currentPurchaseEvent;
+            if (!event) return;
+            
+            // Mock payment processing
+            setTimeout(() => {
+                const newTicket = {
+                    id: generateId(),
+                    eventId: event.id,
+                    eventName: event.name,
+                    userId: db.currentUser.id,
+                    userName: db.currentUser.name,
+                    userEmail: db.currentUser.email,
+                    price: event.price,
+                    purchasedAt: new Date().toISOString(),
+                    qrCode: generateId() // Mock QR code
+                };
+                
+                db.tickets.push(newTicket);
+                showNotification('Ticket purchased successfully!');
+                showPage('ticketPage');
+                loadAvailableEvents();
+            }, 2000);
+            
+            showNotification('Processing payment...');
+        }
+
+        // Admin Panel
+        function loadAdminPanel() {
+            if (db.currentUser.role !== 'admin') return;
+            
+            // Load users list
+            const usersList = document.getElementById('usersList');
+            usersList.innerHTML = '';
+            
+            db.users.forEach(user => {
+                if (user.id === db.currentUser.id) return; // Don't show current admin
+                
+                const userItem = document.createElement('div');
+                userItem.className = 'user-item';
+                userItem.innerHTML = `
+                    <div class="user-info">
+                        <div class="user-email">${user.email}</div>
+                        <div class="user-role">${user.name} • ${user.role}</div>
+                    </div>
+                    <div class="action-buttons">
+                        ${user.role !== 'admin' ? 
+                            `<button class="btn-mini btn-promote" onclick="promoteUser('${user.id}')">Promote</button>` : 
+                            ''
+                        }
+                        <button class="btn-mini btn-ban" onclick="banUser('${user.id}')">Ban</button>
+                    </div>
+                `;
+                usersList.appendChild(userItem);
+            });
+            
+            // Update admin stats
+            document.getElementById('adminTotalUsers').textContent = db.users.length;
+            document.getElementById('adminTotalEvents').textContent = db.events.length;
+            document.getElementById('adminActiveEvents').textContent = db.events.filter(e => new Date(e.dateTime) > new Date()).length;
+            
+            const totalRevenue = db.tickets.reduce((sum, ticket) => sum + ticket.price, 0);
+            document.getElementById('adminTotalRevenue').textContent = `${totalRevenue.toFixed(2)}`;
+        }
+
+        function promoteUser(userId) {
+            const user = db.users.find(u => u.id === userId);
+            if (user) {
+                user.role = 'admin';
+                loadAdminPanel();
+                showNotification(`${user.name} promoted to admin`);
+            }
+        }
+
+        function banUser(userId) {
+            const userIndex = db.users.findIndex(u => u.id === userId);
+            if (userIndex > -1) {
+                const userName = db.users[userIndex].name;
+                db.users.splice(userIndex, 1);
+                loadAdminPanel();
+                showNotification(`${userName} has been banned`);
+            }
+        }
+
+        // Event Management Functions
+        function editEvent(eventId) {
+            const event = db.events.find(e => e.id === eventId);
+            if (!event) return;
+            
+            // Pre-fill the create event form with existing data
+            document.getElementById('eventName').value = event.name;
+            document.getElementById('eventDescription').value = event.description;
+            document.getElementById('eventDateTime').value = event.dateTime;
+            document.getElementById('eventLocation').value = event.location;
+            document.getElementById('eventPrice').value = event.price;
+            document.getElementById('eventCapacity').value = event.capacity;
+            document.getElementById('eventType').value = event.type;
+            
+            // Store the event ID for updating
+            window.editingEventId = eventId;
+            
+            showPage('createEventPage');
+            showNotification('Editing event - make your changes and submit');
+        }
+
+        function deleteEvent(eventId) {
+            if (confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
+                const eventIndex = db.events.findIndex(e => e.id === eventId);
+                if (eventIndex > -1) {
+                    db.events.splice(eventIndex, 1);
+                    
+                    // Remove related invites and tickets
+                    db.invites = db.invites.filter(i => i.eventId !== eventId);
+                    db.tickets = db.tickets.filter(t => t.eventId !== eventId);
+                    
+                    loadDashboard();
+                    showNotification('Event deleted successfully');
+                }
+            }
+        }
+
+        // Update the create event form to handle editing
+        document.getElementById('createEventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (window.editingEventId) {
+                // Update existing event
+                const event = db.events.find(e => e.id === window.editingEventId);
+                if (event) {
+                    event.name = document.getElementById('eventName').value;
+                    event.description = document.getElementById('eventDescription').value;
+                    event.dateTime = document.getElementById('eventDateTime').value;
+                    event.location = document.getElementById('eventLocation').value;
+                    event.price = parseFloat(document.getElementById('eventPrice').value);
+                    event.capacity = parseInt(document.getElementById('eventCapacity').value);
+                    event.type = document.getElementById('eventType').value;
+                    
+                    showNotification('Event updated successfully!');
+                }
+                delete window.editingEventId;
+            } else {
+                // Create new event (existing code)
+                const newEvent = {
+                    id: generateId(),
+                    name: document.getElementById('eventName').value,
+                    description: document.getElementById('eventDescription').value,
+                    dateTime: document.getElementById('eventDateTime').value,
+                    location: document.getElementById('eventLocation').value,
+                    price: parseFloat(document.getElementById('eventPrice').value),
+                    capacity: parseInt(document.getElementById('eventCapacity').value),
+                    type: document.getElementById('eventType').value,
+                    hostId: db.currentUser.id,
+                    hostName: db.currentUser.name,
+                    createdAt: new Date().toISOString()
+                };
+                
+                db.events.push(newEvent);
+                showNotification('Event created successfully!');
+            }
+            
+            // Reset form
+            document.getElementById('createEventForm').reset();
+            showPage('dashboardPage');
+        });
+
+        // Initialize app
+        function initializeApp() {
+            // Set minimum date for event creation to today
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('eventDateTime').min = now.toISOString().slice(0, 16);
+            
+            // Add some sample data for demo purposes
+            const sampleEvents = [
+                {
+                    id: 'sample1',
+                    name: 'Midnight Villa Soirée',
+                    description: 'An exclusive gathering at a stunning hillside villa featuring world-class DJs and curated cocktails.',
+                    dateTime: '2025-08-15T22:00',
+                    location: 'Beverly Hills Villa, Los Angeles',
+                    price: 150,
+                    capacity: 50,
+                    type: 'villa_party',
+                    hostId: 'demo-host',
+                    hostName: 'Elite Events LA',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: 'sample2',
+                    name: 'Underground Pulse',
+                    description: 'Raw techno vibes in a secret warehouse location. Limited capacity for the true underground experience.',
+                    dateTime: '2025-08-20T23:30',
+                    location: 'Warehouse District (Location revealed 2hrs before)',
+                    price: 75,
+                    capacity: 100,
+                    type: 'underground_rave',
+                    hostId: 'demo-host2',
+                    hostName: 'Underground Collective',
+                    createdAt: new Date().toISOString()
+                }
+            ];
+            
+            // Add sample events if database is empty
+            if (db.events.length === 0) {
+                db.events.push(...sampleEvents);
+            }
+        }
+
+        // Initialize the app when page loads
+        window.addEventListener('load', initializeApp);
+    </script>
+</body>
+</html>
